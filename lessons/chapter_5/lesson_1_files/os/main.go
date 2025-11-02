@@ -100,7 +100,10 @@ func simpleReadWrite() {
 func fileInfo() {
 	info, err := os.Stat("qwe.txt")
 
-	if err != nil {
+	if os.IsNotExist(err) {
+		fmt.Println("File doesn't exist")
+		return
+	} else if err != nil {
 		fmt.Println("Openning error:", err)
 		return
 	}
@@ -112,6 +115,26 @@ func fileInfo() {
 	fmt.Println("Last edited:", info.ModTime())
 }
 
+// Управление папками
+func folder() {
+	// Создание папки
+	if err := os.Mkdir("a_folder", 0755); err != nil {
+		fmt.Println("Creating folder error:", err)
+	}
+
+	// Перемионавие папки
+	if err := os.Rename("a_folder", "b_folder"); err != nil {
+		fmt.Println("Rename error:", err)
+	}
+
+	// Удаление папки
+	if err := os.RemoveAll("b_folder"); err != nil {
+		fmt.Println("Deleting folder error:", err)
+	}
+
+	fmt.Print("All tasks completed")
+}
+
 func main() {
-	fileInfo()
+	folder()
 }
