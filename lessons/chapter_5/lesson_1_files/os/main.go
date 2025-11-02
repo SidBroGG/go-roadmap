@@ -5,8 +5,8 @@ import (
 	"os"
 )
 
-// Простое открытие файла
-func simpleCreate() {
+// Открытие файла
+func hardCreate() {
 	// Создание файла(перезаписывание файла)
 	file, err := os.Create("Skibidi.txt")
 	// os.Open - открытие файла для чтения
@@ -27,6 +27,29 @@ func simpleCreate() {
 	}
 
 	fmt.Println("Created simple file")
+}
+
+// Чтение из файла
+func hardRead() {
+	file, err := os.Open("cactus.txt")
+
+	if err != nil {
+		fmt.Println("Error openning file:", err)
+		return
+	}
+
+	defer file.Close()
+
+	buffer := make([]byte, 100)
+
+	n, err := file.Read(buffer)
+
+	if err != nil && err.Error() != "EOF" {
+		fmt.Println("Error reading file:", err)
+		return
+	}
+
+	fmt.Println("Readed text:", string(buffer[:n]))
 }
 
 // Открытие файла с помощью os.Openfile
@@ -55,6 +78,40 @@ func openfile() {
 	fmt.Println("Success")
 }
 
-func main() {
+// Упрощенное чтение и запись
+func simpleReadWrite() {
+	text := []byte("qwerty123")
 
+	if err := os.WriteFile("qwerty.txt", text, 0644); err != nil {
+		fmt.Println("Write error:", err)
+		return
+	}
+
+	readText, err := os.ReadFile("qwerty.txt")
+	if err != nil {
+		fmt.Println("Reading error:", err)
+		return
+	}
+
+	fmt.Println("Readed text:", string(readText))
+}
+
+// Просмотр информации о файле
+func fileInfo() {
+	info, err := os.Stat("qwe.txt")
+
+	if err != nil {
+		fmt.Println("Openning error:", err)
+		return
+	}
+
+	fmt.Println("Name:", info.Name())
+	fmt.Println("Size:", info.Size(), "byte")
+	fmt.Println("Chmod:", info.Mode().String())
+	fmt.Println("Is a dir:", info.IsDir())
+	fmt.Println("Last edited:", info.ModTime())
+}
+
+func main() {
+	fileInfo()
 }
